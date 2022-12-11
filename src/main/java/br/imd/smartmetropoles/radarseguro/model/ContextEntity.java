@@ -11,6 +11,7 @@ public class ContextEntity {
     String id;
     List<Data> attributes;
 
+
     public String getType() {
         return type;
     }
@@ -42,4 +43,5 @@ public class ContextEntity {
     public void setAttributes(List<Data> attributes) {
         this.attributes = attributes;
     }
+
 }

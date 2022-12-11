@@ -1,6 +1,7 @@
 package br.imd.smartmetropoles.radarseguro.controller;
 
 import br.imd.smartmetropoles.radarseguro.model.ContextElements;
+import br.imd.smartmetropoles.radarseguro.model.OcorrenciaElement;
 import br.imd.smartmetropoles.radarseguro.model.SensorCamera;
 import br.imd.smartmetropoles.radarseguro.service.InformationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,4 +23,10 @@ public class InformationController {
     public List<SensorCamera> getCamerasSensor() throws IOException {
         return informationService.getSensorCamera();
     }
+
+    @GetMapping("/ocorrencias")
+    public List<OcorrenciaElement> getOcorrencias() throws IOException{
+        return informationService.getOcorrencia();
+    }
+
 }

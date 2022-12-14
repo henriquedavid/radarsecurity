@@ -1,7 +1,6 @@
 package br.imd.smartmetropoles.radarseguro.service;
 
 import br.imd.smartmetropoles.radarseguro.model.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.apache.http.HttpResponse;
@@ -14,11 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Date;
@@ -94,7 +90,7 @@ public class PublishService {
         List<Data> attributes_ = Arrays.asList(data_, data_1, data_2);
 
         contextEntity_.setPattern(false);
-        contextEntity_.setId(String.valueOf(informationService.getEnfetivo().size()+1));
+        contextEntity_.setId(String.valueOf(informationService.getEfetivo().size()+1));
         contextEntity_.setType("Efetivo_Police");
         contextEntity_.setAttributes(attributes_);
 
@@ -226,7 +222,7 @@ public class PublishService {
         //data_5.setValue("");
         //data_5.setType("String");
 
-        List<SensorEfetivo> l = informationService.getEnfetivo();
+        List<SensorEfetivo> l = informationService.getEfetivo();
         Random random = new Random();
         //String lid = l.get(random.nextInt(0, l.size())).getId();
         String lid = "" + random.nextInt(1,l.size() + 1);

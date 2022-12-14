@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 @Service
 public class ScheduleService {
@@ -50,7 +49,7 @@ public class ScheduleService {
     }
 
     public void moverEfetivoAleatoriamente() throws IOException {
-        List<SensorEfetivo> efetivos = informationService.getEnfetivo();
+        List<SensorEfetivo> efetivos = informationService.getEfetivo();
 
         for (int i = 0; i < efetivos.size(); i++){
 

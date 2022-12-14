@@ -1,8 +1,8 @@
 package br.imd.smartmetropoles.radarseguro.controller;
 
-import br.imd.smartmetropoles.radarseguro.model.ContextElements;
 import br.imd.smartmetropoles.radarseguro.model.OcorrenciaElement;
 import br.imd.smartmetropoles.radarseguro.model.SensorCamera;
+import br.imd.smartmetropoles.radarseguro.model.SensorEfetivo;
 import br.imd.smartmetropoles.radarseguro.service.InformationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,4 +29,8 @@ public class InformationController {
         return informationService.getOcorrencia();
     }
 
+    @GetMapping("/efetivo")
+    public List<SensorEfetivo> getEfetivo() throws IOException{
+        return informationService.getEfetivo();
+    }
 }

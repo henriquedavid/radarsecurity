@@ -1,9 +1,6 @@
 package br.imd.smartmetropoles.radarseguro.service;
 
-import br.imd.smartmetropoles.radarseguro.model.ContextElements;
-import br.imd.smartmetropoles.radarseguro.model.ContextEntity;
-import br.imd.smartmetropoles.radarseguro.model.OcorrenciaElement;
-import br.imd.smartmetropoles.radarseguro.model.SensorCamera;
+import br.imd.smartmetropoles.radarseguro.model.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.http.HttpEntity;
@@ -19,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -41,9 +39,9 @@ public class InformationService {
         }
     }
 
-    public List<SensorCamera> getEnfetivo() throws IOException {
+    public List<SensorEfetivo> getEnfetivo() throws IOException {
         CloseableHttpClient httpClient = HttpClients.createDefault();
-        HttpGet httpGet = new HttpGet("http://10.7.41.94:1026/v2/entities?type=Efetivo");
+        HttpGet httpGet = new HttpGet("http://10.7.41.94:1026/v2/entities?type=Efetivo_Police");
 
         HttpResponse response = httpClient.execute(httpGet);
 
@@ -51,8 +49,9 @@ public class InformationService {
             Gson gson = new GsonBuilder().create();
             HttpEntity entity = response.getEntity();
             String jsonString = EntityUtils.toString(entity);
-            List<SensorCamera> getContext = gson.fromJson(jsonString, List.class);
+            List<SensorEfetivo> getContext = gson.fromJson(jsonString, ArrayList.class);
             return getContext;
+
         } else{
             return null;
         }

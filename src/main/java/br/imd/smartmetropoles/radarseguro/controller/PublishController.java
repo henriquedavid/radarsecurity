@@ -48,4 +48,9 @@ public class PublishController {
     public ResponseEntity<?> enviarParaEquipe(@RequestParam("idequipe") String equipeId, @RequestParam("idocorrencia") String ocorrenciaId) throws IOException {
         return publishService.enviarParaEquipe(ocorrenciaId, equipeId);
     }
+
+    @PostMapping("/efetivo/aleatorio")
+    public ResponseEntity<?> gerarEfetivoAleatorio() throws IOException{
+        return publishService.gerarEfetivoAleatorio();
+    }
 }

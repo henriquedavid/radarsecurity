@@ -19,9 +19,11 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 
 @Service
@@ -32,6 +34,9 @@ public class PublishService {
 
     @Autowired
     private InformationService informationService;
+
+    @Autowired
+    private LocalizationService localizationService;
 
     private ObjectMapper objectMapper;
 
@@ -67,14 +72,14 @@ public class PublishService {
         data_.setValue(efetivoDTO.getCoordenadas());
 
         Data data_1 = new Data();
-        data_.setName("nomeEfetivo");
-        data_.setType("String");
-        data_.setValue(efetivoDTO.getNome());
+        data_1.setName("nomeEfetivo");
+        data_1.setType("String");
+        data_1.setValue(efetivoDTO.getNome());
 
         Data data_2 = new Data();
-        data_.setName("Status");
-        data_.setType("String");
-        data_.setValue(efetivoDTO.getNome());
+        data_2.setName("Status");
+        data_2.setType("String");
+        data_2.setValue(efetivoDTO.getStatus());
 
         Data metadata_coors = new Data();
         metadata_coors.setType("DateTime");
@@ -94,7 +99,7 @@ public class PublishService {
         contextEntity_.setAttributes(attributes_);
 
         String json = new Gson().toJson(contextEntity_);
-
+        System.out.println(json);
 
         StringEntity entity = new StringEntity(json);
 
@@ -105,6 +110,7 @@ public class PublishService {
         HttpResponse response = httpClient.execute(httpPost);
 
         if(response.getStatusLine().getStatusCode() == 200){
+            System.out.println(EntityUtils.toString(response.getEntity()));
             return new ResponseEntity<>(HttpStatus.OK);
         } else{
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -215,10 +221,20 @@ public class PublishService {
         data_4.setType("String");
         data_4.setValue(ocorrenciaDTO.getIdsensor());
 
+        //Data data_5 = new Data();
+        //data_5.setName("idequipe");
+        //data_5.setValue("");
+        //data_5.setType("String");
+
+        List<SensorEfetivo> l = informationService.getEnfetivo();
+        Random random = new Random();
+        //String lid = l.get(random.nextInt(0, l.size())).getId();
+        String lid = "" + random.nextInt(1,l.size() + 1);
+
         Data data_5 = new Data();
-        data_.setName("idequipe");
-        data_.setValue("");
-        data_.setType("String");
+        data_5.setName("idequipe");
+        data_5.setType("String");
+        data_5.setValue(lid);
 
         Data metadata_coors = new Data();
         metadata_coors.setType("DateTime");
@@ -249,7 +265,13 @@ public class PublishService {
         httpPost.setHeader("Content-Type", "application/json");
         HttpResponse response = httpClient.execute(httpPost);
         if(response.getStatusLine().getStatusCode() == 200){
-            return new ResponseEntity<>(HttpStatus.OK);
+            //System.out.println(EntityUtils.toString(response.getEntity()));
+            try{
+                return new ResponseEntity<>(HttpStatus.OK);
+            } finally {
+                updateStatusEfetivo(lid, "Ocupado");
+            }
+
         } else{
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -291,5 +313,25 @@ public class PublishService {
         } else{
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    public ResponseEntity<?> gerarEfetivoAleatorio() throws IOException {
+
+        for (int i = 0; i < 10; i++ ){
+            EfetivoDTO efetivoDTO = new EfetivoDTO();
+
+            efetivoDTO.setCoordenadas(localizationService.getRandomCoordinate());
+            efetivoDTO.setData(LocalDate.now().toString());
+            efetivoDTO.setNome("Efetivo " + (i + 1));
+            efetivoDTO.setStatus("Livre");
+
+            ResponseEntity<?> response = createContextEquipe(efetivoDTO);
+
+            if (response.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
+                return response;
+            }
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
